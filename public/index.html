@@ -37,7 +37,45 @@
       The build step will place the bundled scripts into the <body> tag.
 
       To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+	  To create a production bundle, use `npm run build` or `yarn build`.
+	-->
+	<div id="container"></div>
+
+	<script type="x-shader/x-vertex" id="vertexShader">
+	  uniform float amplitude;
+	  attribute vec2 posXY;
+	  uniform float mousePositionX;
+	  uniform float mousePositionY;
+	  attribute float size;
+	  //attribute float posY;
+	  //uniform float amplitude;
+	
+	  attribute vec3 vertexColor;
+
+	  varying vec4 varColor;
+	
+	  void main()
+	  {
+		varColor = vec4(vertexColor, 1.0);
+
+		vec4 pos = vec4(position, 1.0);
+		pos.z *= amplitude;
+		pos.y = (1.0-amplitude) * pos.y * posXY.y;
+		pos.x = (1.0-amplitude) * pos.x * posXY.x;
+		vec4 mvPosition = modelViewMatrix * pos;
+		
+		gl_PointSize = 3.0;
+		gl_Position = projectionMatrix * mvPosition;
+	  }
+	</script>
+	
+	<script type="x-shader/x-fragment" id="fragmentShader">
+		in vec4 varColor;
+	
+		void main()
+		{
+			gl_FragColor = varColor;
+		}
+	</script>
   </body>
 </html>
